@@ -1,5 +1,5 @@
 databases:
-- O-HAZE + paper (https://data.vision.ee.ethz.ch/cvl/ntire18//o-haze/)
+- O-HAZE + paper (https://data.vision.ee.ethz.ch/cvl/ntire18//o-haze/) (paper 3)
 - NN-HAZE + paper (https://data.vision.ee.ethz.ch/cvl/ntire20/nh-haze/)
 useful sites:
 - https://www.digitalocean.com/community/tutorials/image-dehazing-the-what-why-and-how
