@@ -8,12 +8,9 @@ from torchvision import transforms
 
 class MultiHazyDataset(Dataset):
     """
-    Dataset pentru antrenament/evaluare:
-    Fiecare exemplu este o pereche (hazy, clear) pentru fiecare imagine hazy.
-
     root_dir/
         clear/ — ground truth (e.g. 3068.jpg)
-        hazy/  — variante de hazy (e.g. 3068_0.8_0.1.jpg)
+        hazy/  — hazy (e.g. 3068_0.8_0.1.jpg)
     """
     def __init__(self, root_dir, transform=None, clear_ext="jpg", haze_exts=("jpg", "png")):
         clear_dir = os.path.join(root_dir, "clear_rsz")

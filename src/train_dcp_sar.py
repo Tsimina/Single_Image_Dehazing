@@ -3,7 +3,7 @@ import torch.nn as nn
 from torch.utils.data import DataLoader, random_split
 from torchvision import transforms
 from model.dcp_sar_unet import DehazingUNet
-from dataset.dataoader_sar import MultiHazySARDataset
+from dataset.dataloader_sar import MultiHazySARDataset
 from PIL import Image
 import os
 import numpy as np
@@ -15,7 +15,7 @@ def tensor_to_numpy(tensor):
         tensor = tensor[0]
     return tensor.permute(1,2,0).cpu().numpy()
 
-# Transformări
+# Transorm for RGB și SAR
 transform_rgb = transforms.Compose([
     transforms.Resize((256, 256)),
     transforms.ToTensor(),
@@ -25,7 +25,7 @@ transform_sar = transforms.Compose([
     transforms.ToTensor(),
 ])
 
-# Creezi datasetul SAR
+# SAR dataset
 dataset = MultiHazySARDataset(
     root_dir="dataset/images",
     transform_rgb=transform_rgb,
@@ -109,6 +109,7 @@ def evaluate_model(loader):
         'MAE': mae_sum/count if count else 0
     }
 
+# Saved model path contains the number of epochs as extension
 epochs = 20
 for epoch in range(epochs):
     model.train()
@@ -140,5 +141,5 @@ with open(results_path, "a") as f:
     f.write(f"Test PSNR: {test_metrics['PSNR']:.2f} | Test SSIM: {test_metrics['SSIM']:.4f} | "
             f"Test MSE: {test_metrics['MSE']:.6f} | Test MAE: {test_metrics['MAE']:.6f}\n\n")
 
-torch.save(model.state_dict(), "dehazing_unet_sar_30.pth")
-print("Model saved: dehazing_unet_sar_30.pth")
+torch.save(model.state_dict(), "dehazing_unet_sar_20.pth")
+print("Model saved: dehazing_unet_sar_20.pth")

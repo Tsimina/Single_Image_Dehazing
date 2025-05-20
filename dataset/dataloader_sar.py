@@ -5,8 +5,8 @@ from torch.utils.data import Dataset
 class MultiHazySARDataset(Dataset):
     """
         clear/ — ground truth (e.g. 3068.jpg)
-        hazy/  — variante de hazy (e.g. 3068_0.8_0.1.jpg)
-        sar/   — imagini SAR (e.g. 3068_0.8_0.1.png)
+        hazy/  — hazy (e.g. 3068_0.8_0.1.jpg)
+        sar/   — SAR (e.g. 3068_0.8_0.1.png)
     """
     def __init__(self, root_dir, transform_rgb=None, transform_sar=None, clear_ext="jpg", haze_exts=("jpg", "png"), sar_ext="png"):
         clear_dir = os.path.join(root_dir, "clear_rsz")
@@ -31,9 +31,9 @@ class MultiHazySARDataset(Dataset):
                     sar_path = os.path.join(sar_dir, sar_name)
                     if os.path.exists(sar_path):
                         self.triples.append((os.path.join(haze_dir, hp), sar_path, clear_map[stem]))
-        assert self.triples, "Nu există nicio triplă validă (hazy, sar, clear)"
+        assert self.triples, "No valid pair (hazy, sar, clear)"
 
-        # Afișează primele 5 triple pentru verificare
+        # Print the first 5 triples
         for i, (hazy_path, sar_path, clear_path) in enumerate(self.triples[:5]):
             print(f"{i+1}: Hazy: {os.path.basename(hazy_path)} | SAR: {os.path.basename(sar_path)} | Clear: {os.path.basename(clear_path)}")
 

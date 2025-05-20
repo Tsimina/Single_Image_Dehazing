@@ -35,7 +35,7 @@ if __name__ == "__main__":
 
     run_inference(
         model_path="model.pth",
-        input_dir="images",      # imagini cu ceață pentru test
-        output_dir="outputs",    # rezultate salvate aici
+        input_dir="images",      
+        output_dir="outputs",    
         device=device
     )

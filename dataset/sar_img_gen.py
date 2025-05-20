@@ -3,6 +3,8 @@ import argparse
 from PIL import Image, ImageFilter
 import numpy as np
 
+# Generate fake SAR images from RGB images
+# This function simulates a SAR image from an RGB image by applying a filter and adding noise
 def fake_sar_from_rgb(rgb_img):
     sar = rgb_img.convert("L")
     sar = sar.filter(ImageFilter.FIND_EDGES)

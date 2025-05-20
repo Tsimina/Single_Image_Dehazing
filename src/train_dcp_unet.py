@@ -10,18 +10,18 @@ from model.dcp_unet import DehazingUNet
 from skimage.metrics import mean_squared_error
 
 
-# Transformări
+# Transform for RGB
 transform = transforms.Compose([
     transforms.ToTensor(),
 ])
 
-# Încărcare date
+# Load data
 train_loader, val_loader, test_loader = get_loaders(
     root_dir="dataset/images", batch_size=4, val_ratio=0.2, test_ratio=0.1,
     num_workers=0, transform=transform
 )
 
-# Afișare dimensiuni split-uri
+# Split dim
 print(f" train: {len(train_loader.dataset)}")
 print(f" val:   {len(val_loader.dataset)}")
 print(f" test:  {len(test_loader.dataset)}")
@@ -41,20 +41,19 @@ plt.axis('off')
 plt.imshow(clear_img)
 plt.show()
 
-# Model și optimizator
+# Model + optimizer + loss
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 model = DehazingUNet().to(device)
 optimizer = Adam(model.parameters(), lr=1e-4)
 criterion = L1Loss()
 
 def tensor_to_numpy(tensor):
-    # Acceptă batch sau nu
+    # Batch
     if tensor.dim() == 4:
-        tensor = tensor[0]  # ia doar prima imagine din batch
+        tensor = tensor[0]  
     return tensor.permute(1,2,0).cpu().numpy()
 
-# Funcție de evaluare pentru train și val
-
+# Evaluate model
 def evaluate_model(loader):
     model.eval()
     psnr_sum = 0.0
@@ -83,7 +82,7 @@ def evaluate_model(loader):
         'MAE': mae_sum/count if count else 0
     }
 
-# Antrenament
+#
 epochs = 20
 for epoch in range(1, epochs+1):
     model.train()
@@ -99,7 +98,6 @@ for epoch in range(1, epochs+1):
     avg_loss = total_loss/len(train_loader)
     print(f"Epoch {epoch}/{epochs} – Loss: {avg_loss:.4f}")
 
-# Evaluare finală și salvare metrici
 train_metrics = evaluate_model(train_loader)
 val_metrics = evaluate_model(val_loader)
 

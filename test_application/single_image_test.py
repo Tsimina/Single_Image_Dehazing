@@ -10,6 +10,7 @@ import matplotlib.pyplot as plt
 from PIL import Image
 from model.dcp_sar_unet import DehazingUNet as DehazingModel
 
+# Function to visualize the dehazed image
 def visualize_dehazed_image(image_path, model_path, device, use_sar=False, sar_path=None):
     transform_rgb = transforms.Compose([
         transforms.Resize((256, 256)),
@@ -56,6 +57,7 @@ if __name__ == "__main__":
     parser.add_argument("--device", type=str, default="cuda", help="cuda sau cpu")
     args = parser.parse_args()
 
+# Block for running the script
     device = torch.device(args.device if torch.cuda.is_available() else "cpu")
     visualize_dehazed_image(
         image_path=args.image,
