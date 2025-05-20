@@ -1,6 +1,5 @@
 # Single_Image_Dehazing
 
-# Single_Image_Dehazing
 
 ## Description
 This project implements a prior-based deep learning method for removing haze from a single input image. We leverage traditional image dehazing priors integrated into a UNet architecture, combining the strengths of classical priors with modern convolutional networks. The goal is to restore clarity, contrast, and color fidelity in photographs affected by natural or artificial fog.
