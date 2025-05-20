@@ -146,7 +146,7 @@ python test_application/single_image_test.py
 ```
 ## Results 
 
-| Model                 | PSNR Val (dB) | SSIM val (%) |
+| Model                 | PSNR val (dB) | SSIM val (%) |
 |:---------------------:|:-------------:|:------------:|
 | DCP+UNet vanilla      |    31.1815    |    93,98     |
 | DCP+SAR Enhanced UNet |     31.61     |    94.36     |
