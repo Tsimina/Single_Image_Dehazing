@@ -50,8 +50,11 @@ Single_Image_Dehazing/
 
 ## Installation
 
-# Clone this repository
+**Clone the repository:**
+
+```bash
 git clone https://github.com/Tsimina/Single_Image_Dehazing.git
+cd Single_Image_Dehazing
 
 # Navigate to the repository
 cd Single_Image_Dehazing
