@@ -99,7 +99,7 @@ python -m dataset.sar_img_gen \
   --output dataset/sar_images
 ```
 
-Note: SAR maps are used alongside hazy/clean pairs during SAR-enhanced training.
+`Note: SAR maps are used alongside hazy/clean pairs during SAR-enhanced training.`
 
 # Training
 
@@ -113,7 +113,7 @@ python -m src.train_dcp_sar
 python -m src.train
 ```
 
-Scripts uses the dataloader.py to map the hazy groundthruth images correspodingly.
+`Scripts uses the dataloader.py to map the hazy groundthruth images correspodingly.`
 
 ## Testing (Single Image)
 
