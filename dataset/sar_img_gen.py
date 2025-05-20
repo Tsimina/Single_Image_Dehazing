@@ -1,10 +1,7 @@
 import os
+import argparse
 from PIL import Image, ImageFilter
 import numpy as np
-
-input_dir = "test_application"
-output_dir = "test_application"
-os.makedirs(output_dir, exist_ok=True)
 
 def fake_sar_from_rgb(rgb_img):
     sar = rgb_img.convert("L")
@@ -15,11 +12,18 @@ def fake_sar_from_rgb(rgb_img):
     sar = Image.fromarray((sar_np * 255).astype(np.uint8))
     return sar
 
-for fname in os.listdir(input_dir):
-    if fname.lower().endswith(('.jpg', '.jpeg', '.png')):
-        img = Image.open(os.path.join(input_dir, fname)).convert("RGB")
-        sar = fake_sar_from_rgb(img)
-        # Salvează cu extensia .png (sau păstrează extensia originală dacă vrei)
-        out_name = fname.rsplit('.', 1)[0] + '.png'
-        sar.save(os.path.join(output_dir, out_name))
-print("SAR images generated in", output_dir)
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--input_dir", type=str, required=True, help="Folder cu imagini RGB")
+    parser.add_argument("--output_dir", type=str, required=True, help="Folder unde se salvează imaginile SAR")
+    args = parser.parse_args()
+
+    os.makedirs(args.output_dir, exist_ok=True)
+
+    for fname in os.listdir(args.input_dir):
+        if fname.lower().endswith(('.jpg', '.jpeg', '.png')):
+            img = Image.open(os.path.join(args.input_dir, fname)).convert("RGB")
+            sar = fake_sar_from_rgb(img)
+            out_name = fname.rsplit('.', 1)[0] + '.png'
+            sar.save(os.path.join(args.output_dir, out_name))
+    print("SAR images generated in", args.output_dir)
