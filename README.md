@@ -34,21 +34,20 @@ The dataloader.py script creates a mapping between the clear images and the diff
 
 ## Structure of the repo
 
-dataset/: Dataloader script that matches ground-truth images with their corresponding hazy images, plus image resizing scripts.
+dataset: Dataloader script that matches ground-truth images with their corresponding hazy images, plus image resizing scripts.
 
-model/: Model definition scripts and trained model weights, usable by single_image_test.py.
+model: Model definition scripts and trained model weights, usable by single_image_test.py.
 
-papers/: Collection of scientific articles and reference materials.
+papers: Collection of scientific articles and reference materials.
 
-research/: Experiments, analyses, and useful links.
+research: Experiments, analyses, and useful links.
 
-src/: Source code for training and inference implementations.
+src: Source code for training and inference implementations.
 
-test/: Test images and the test harness script for evaluating models.
+test: Test images and the test harness script for evaluating models.
 
-results/: Text files (.txt) containing model performance metrics.
+results: Text files (.txt) containing model performance metrics.
 
-README.md: This documentation file.
 
 
 ## Usage
