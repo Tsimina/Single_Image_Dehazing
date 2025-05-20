@@ -30,14 +30,13 @@ The dataloader.py script creates a mapping between the clear images and the diff
 ## Structure of the repo
 
 Single_Image_Dehazing/
-│
-├── dataset/            # Dataloader script and image resizing utilities
-├── model/              # Model definition scripts and trained weights
-├── papers/             # Scientific articles and reference materials
-├── research/           # Experiments, analyses, and useful links
-├── src/                # Source code for training and inference
-├── test/               # Test images and evaluation scripts
-└── results/            # Performance metrics in text files
+├── dataset/    # Dataloader script and image resizing utilities
+├── model/      # Model definition scripts and trained weights
+├── papers/     # Scientific articles and reference materials
+├── research/   # Experiments, analyses, and useful links
+├── src/        # Source code for training and inference
+├── test/       # Test images and evaluation scripts
+└── results/    # Performance metrics in text files
 
 
 ## Requirements
@@ -76,6 +75,7 @@ Install dependencies:
 pip install -r requirements.txt
 ```
 
+
 ## Usage
 
 # Preprocessing
@@ -91,7 +91,7 @@ python -m dataset.resize \
 
 # SAR Image Generation
 
-Generate SAR maps for SAR-based models:
+Generate SAR maps for SAR-based models, using the hazy dataset:
 
 ```
 python -m dataset.sar_img_gen \
