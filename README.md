@@ -112,7 +112,7 @@ python -m src.train_dcp_sar
 python -m src.train
 ```
 > [!NOTE] 
-> Scripts uses the dataloader.py and dataloader_sar.py scrpits to map the hazy groundthruth images correspodingly to their clear counterparts.
+> The training scripts use the dataloader.py and dataloader_sar.py  to map the hazy groundthruth images correspodingly to their clear counterparts.
 
 ## Testing (Single Image)
 
