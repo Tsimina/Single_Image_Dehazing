@@ -59,12 +59,12 @@ cd Single_Image_Dehazing
 ```
 
 
-# Navigate to the repository
+**Navigate to the repository**
 ```
 cd Single_Image_Dehazing
  ```
 
-Create and activate a virtual environment (optional):
+**Create and activate a virtual environment (optional)**
 
 ```
 python -m venv venv
@@ -72,7 +72,7 @@ source venv/bin/activate    # Linux/macOS
 venv\Scripts\activate.bat   # Windows
 ```
 
-Install dependencies:
+**Install dependencies**
 ```
 pip install -r requirements.txt
 ```
@@ -80,9 +80,9 @@ pip install -r requirements.txt
 
 ## Usage
 
-# Preprocessing
+**Preprocessing**
 
-Resize images to 256×256:
+Resize dataset images to 256×256 to ensure consistency:
 
 ```
 python -m dataset.resize \
@@ -91,7 +91,7 @@ python -m dataset.resize \
   --size 256
 ```
 
-# SAR Image Generation
+**SAR Image Generation**
 
 Generate SAR maps for SAR-based models, using the hazy dataset:
 
@@ -105,13 +105,11 @@ python -m dataset.sar_img_gen \
 
 # Training
 
-# DCP+SAR model
 ```
+DCP+SAR model
 python -m src.train_dcp_sar
-```
 
 # UNet with priors
-```
 python -m src.train
 ```
 
@@ -119,7 +117,8 @@ python -m src.train
 
 ## Testing (Single Image)
 
-Standard
+**Standard**
+For DCP+UNet vanilla architecture
 
 ```
 python single_image_test.py \
@@ -128,7 +127,8 @@ python single_image_test.py \
   --model model/unet_dehaze_prior.pth
 ```
 
-SAR-Enhanced
+**SAR-Enhanced**
+For SAR enhanced DCP architecture
 
 ```
 python test_application/single_image_test.py \
