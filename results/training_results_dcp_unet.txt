@@ -1,0 +1,10 @@
+=== Training and Validation Metrics ===
+Train - Loss: 0.0210
+Train PSNR: 31.3540
+Train SSIM: 0.9405
+Train MSE: 0.0008
+Train MAE: 0.0206
+Val PSNR: 31.1815
+Val SSIM: 0.9398
+Val MSE: 0.0009
+Val MAE: 0.0212

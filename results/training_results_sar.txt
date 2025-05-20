@@ -1,0 +1,7 @@
+=== Final results ===
+Train Loss: 0.0189
+Val Loss: 0.0197
+Test Loss: 0.0195
+Val PSNR: 31.61 | Val SSIM: 0.9436 | Val MSE: 0.000778 | Val MAE: 0.019695
+Test PSNR: 31.71 | Test SSIM: 0.9442 | Test MSE: 0.000767 | Test MAE: 0.019525
+
