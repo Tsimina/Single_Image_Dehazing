@@ -86,17 +86,20 @@ Resize dataset images to 256×256 to ensure consistency:
 python -m dataset.resize 
   --input dataset/ 
   --output dataset/resized 
-  --size 256
+  --width 256
+  --height 256
 ```
+> [!NOTE] 
+> The size argumet was set to 256 by default.
 
 **SAR Image Generation**
 
 Generate SAR maps for SAR-based models, using the hazy dataset:
 
 ```
-python -m dataset.sar_img_gen 
-  --input dataset/resized/ 
-  --output dataset/sar_images
+python dataset/sar_img_gen.py
+--input_dir dataset/hazy
+--output_dir dataset/hazy_sar
 ```
 
 > [!NOTE] 
@@ -105,12 +108,14 @@ python -m dataset.sar_img_gen
 # Training
 
 ```
+cd Single_Image_Dehazing
 DCP+SAR model
 python -m src.train_dcp_sar
 
 # UNet with priors
 python -m src.train
 ```
+
 > [!NOTE] 
 > The training scripts use the dataloader.py and dataloader_sar.py  to map the hazy groundthruth images correspodingly to their clear counterparts.
 
