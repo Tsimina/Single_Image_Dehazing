@@ -52,5 +52,9 @@ results: Text files (.txt) containing model performance metrics.
 
 ## Usage
 
+## Examples 
+![dcp_unet](https://github.com/user-attachments/assets/95c456a1-970c-4d14-b212-6400c5a04cb4)
+
+
 
 
