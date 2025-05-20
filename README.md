@@ -34,7 +34,10 @@ Single_Image_Dehazing/
 ├── papers/     # Scientific articles and reference materials
 ├── research/   # Experiments, analyses, and useful links
 ├── src/        # Source code for training and inference
-├── test_application/       # Test images, evaluation scripts and Pre-Trained models
+├── test_application/  # Test images, evaluation scripts and Pre-Trained models
+|   |
+|   ├── saved_models/ # Pre-Trained models that can be used to test the dehazing capabilities on the test/own images 
+|
 └── results/    # Performance metrics in text files
 ```
 
