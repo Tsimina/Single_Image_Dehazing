@@ -144,7 +144,7 @@ python test_application/single_image_test.py
   --use_sar 
   --sar_path test_application/haze_img1_sar.jpg
 ```
-## Results 
+## Perfromance
 
 | Model                 | PSNR val (dB) | SSIM val (%) |
 |:---------------------:|:-------------:|:------------:|
