@@ -25,8 +25,6 @@ Our dehazing network uses a UNet architecture to fuse multi-scale feature repres
 
 Our prior-based UNet models were trained on the RESIDE Beta dataset, using a total of 18,200 images covering diverse haze conditions and paired clean references. You can download the dataset here: [RESIDE Beta Dataset](https://utexas.app.box.com/s/25idwrsn890w03grdr6pls28cy38r91i). We used the OTS (Outdoor Training Set)for our application. 
 
-The dataloader.py script creates a mapping between the clear images and the different 
-
 ## Structure of the repo
 
 ```
@@ -114,7 +112,7 @@ python -m src.train_dcp_sar
 python -m src.train
 ```
 > [!NOTE] 
-> Scripts uses the dataloader.py to map the hazy groundthruth images correspodingly.
+> Scripts uses the dataloader.py and dataloader_sar.py scrpits to map the hazy groundthruth images correspodingly to their clear counterparts.
 
 ## Testing (Single Image)
 
