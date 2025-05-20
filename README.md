@@ -147,7 +147,8 @@ An example result of our Single Image Dehazing pipeline. The left image is the o
 
 For SAR-enhanced dehazing, the model leverages the additional SAR map (middle) to improve haze estimation and enhance detail recovery.
 
-![dcp_sar_rez](https://github.com/user-attachments/assets/89064b5a-e6bb-41a7-b340-55c1a5c932fb)
+![dcp_unet](https://github.com/user-attachments/assets/e8852539-a54b-4209-9a4a-f293a96a5c60)
+
 
 
 
