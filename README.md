@@ -141,7 +141,14 @@ python test_application/single_image_test.py \
 
 
 ## Examples 
+An example result of our Single Image Dehazing pipeline. The left image is the original hazy photograph, and the right image demonstrates the dehazing result produced by the UNet-based prior model.
 ![dcp_unet](https://github.com/user-attachments/assets/95c456a1-970c-4d14-b212-6400c5a04cb4)
+
+
+For SAR-enhanced dehazing, the model leverages the additional SAR map (middle) to improve haze estimation and enhance detail recovery.
+
+![dcp_sar_rez](https://github.com/user-attachments/assets/89064b5a-e6bb-41a7-b340-55c1a5c932fb)
+
 
 
 
