@@ -52,23 +52,29 @@ Single_Image_Dehazing/
 
 **Clone the repository:**
 
-```bash
+```
 git clone https://github.com/Tsimina/Single_Image_Dehazing.git
 cd Single_Image_Dehazing
+```
+
 
 # Navigate to the repository
+```
 cd Single_Image_Dehazing
- 
+ ```
 
 Create and activate a virtual environment (optional):
 
+```
 python -m venv venv
 source venv/bin/activate    # Linux/macOS
 venv\Scripts\activate.bat   # Windows
+```
 
 Install dependencies:
-
+```
 pip install -r requirements.txt
+```
 
 ## Usage
 
@@ -76,58 +82,59 @@ pip install -r requirements.txt
 
 Resize images to 256×256:
 
+```
 python -m dataset.resize \
   --input dataset/ \
   --output dataset/resized \
   --size 256
+```
 
 # SAR Image Generation
 
 Generate SAR maps for SAR-based models:
 
+```
 python -m dataset.sar_img_gen \
   --input dataset/resized/ \
   --output dataset/sar_images
+```
 
 Note: SAR maps are used alongside hazy/clean pairs during SAR-enhanced training.
 
 # Training
 
 # DCP+SAR model
+```
 python -m src.train_dcp_sar
+```
 
 # UNet with priors
+```
 python -m src.train
+```
 
-Scripts auto-load from dataset/resized/ and dataset/sar_images/.
+Scripts uses the dataloader.py to map the hazy groundthruth images correspodingly.
 
-Testing (Single Image)
+## Testing (Single Image)
 
 Standard
 
+```
 python single_image_test.py \
   --input test/haze_img2.jpg \
   --output results/dehazed_img2.jpg \
   --model model/unet_dehaze_prior.pth
+```
 
 SAR-Enhanced
 
+```
 python test_application/single_image_test.py \
   --image test_application/haze_img1.jpg \
   --model test_application/dehazing_unet_sar_30.pth \
   --use_sar \
   --sar_path test_application/haze_img1_sar.jpg
-
-Ensure results dir exists:
-
-mkdir -p results
-
-As Python Module
-
-from src.dehaze import PriorUnetDehazer
-model = PriorUnetDehazer(weights_path="model/unet_dehaze_prior.pth")
-output = model.process("test/haze_img2.jpg")
-output.save("results/output.png")
+```
 
 
 ## Examples 
