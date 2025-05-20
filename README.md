@@ -29,14 +29,16 @@ The dataloader.py script creates a mapping between the clear images and the diff
 
 ## Structure of the repo
 
+```
 Single_Image_Dehazing/
 ├── dataset/    # Dataloader script and image resizing utilities
-├── model/      # Model definition scripts and trained weights
+├── model/      # Model definition 
 ├── papers/     # Scientific articles and reference materials
 ├── research/   # Experiments, analyses, and useful links
 ├── src/        # Source code for training and inference
-├── test/       # Test images and evaluation scripts
+├── test_application/       # Test images, evaluation scripts and Pre-Trained models
 └── results/    # Performance metrics in text files
+```
 
 
 ## Requirements
