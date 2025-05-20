@@ -155,6 +155,9 @@ For SAR-enhanced dehazing, the model leverages the additional SAR map (middle) t
 
 ![dcp_unet](https://github.com/user-attachments/assets/e8852539-a54b-4209-9a4a-f293a96a5c60)
 
+## Limitations
+
+Due to limited hardware resources (e.g., GPU memory and compute), model training and inference were constrained, which may affect performance and image quality.
 
 
 
