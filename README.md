@@ -83,9 +83,9 @@ pip install -r requirements.txt
 Resize dataset images to 256×256 to ensure consistency:
 
 ```
-python -m dataset.resize \
-  --input dataset/ \
-  --output dataset/resized \
+python -m dataset.resize 
+  --input dataset/ 
+  --output dataset/resized 
   --size 256
 ```
 
@@ -94,8 +94,8 @@ python -m dataset.resize \
 Generate SAR maps for SAR-based models, using the hazy dataset:
 
 ```
-python -m dataset.sar_img_gen \
-  --input dataset/resized/ \
+python -m dataset.sar_img_gen 
+  --input dataset/resized/ 
   --output dataset/sar_images
 ```
 
@@ -120,9 +120,9 @@ python -m src.train
 For DCP+UNet vanilla architecture
 
 ```
-python single_image_test.py \
-  --input test/haze_img2.jpg \
-  --output results/dehazed_img2.jpg \
+python single_image_test.py 
+  --input test/haze_img2.jpg 
+  --output results/dehazed_img2.jpg 
   --model model/unet_dehaze_prior.pth
 ```
 
@@ -130,10 +130,10 @@ python single_image_test.py \
 For SAR enhanced DCP architecture
 
 ```
-python test_application/single_image_test.py \
-  --image test_application/haze_img1.jpg \
-  --model test_application/dehazing_unet_sar_30.pth \
-  --use_sar \
+python test_application/single_image_test.py 
+  --image test_application/haze_img1.jpg 
+  --model test_application/dehazing_unet_sar_30.pth 
+  --use_sar 
   --sar_path test_application/haze_img1_sar.jpg
 ```
 
