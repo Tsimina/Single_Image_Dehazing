@@ -1,6 +1,5 @@
 # Single_Image_Dehazing
 
-# Single_Image_Dehazing
 
 ## Description
 This project implements a prior-based deep learning method for removing haze from a single input image. We leverage traditional image dehazing priors integrated into a UNet architecture, combining the strengths of classical priors with modern convolutional networks. The goal is to restore clarity, contrast, and color fidelity in photographs affected by natural or artificial fog.
@@ -35,19 +34,27 @@ The dataloader.py script creates a mapping between the clear images and the diff
 
 ## Structure of the repo
 
-Single_Image_Dehazing/
-│
-├── dataset/ # dataloader script which does the match between the groundthruth images and associated hazy images + image resize scripts
-├── model/ # model scripts + trained models which can be used inside the single_image_test.py script
-├── papers/ # scientific articles and references
-├── research/ # experiments, analyses (useful links)
-├── src/ # source code for training and inference
-├── test/ # test images + test script for models 
-├── results/ # .txt files containing the model performance 
-└── README.md # This documentation
+dataset: Dataloader script that matches ground-truth images with their corresponding hazy images, plus image resizing scripts.
+
+model: Model definition scripts and trained model weights, usable by single_image_test.py.
+
+papers: Collection of scientific articles and reference materials.
+
+research: Experiments, analyses, and useful links.
+
+src: Source code for training and inference implementations.
+
+test: Test images and the test harness script for evaluating models.
+
+results: Text files (.txt) containing model performance metrics.
+
 
 
 ## Usage
+
+## Examples 
+![dcp_unet](https://github.com/user-attachments/assets/95c456a1-970c-4d14-b212-6400c5a04cb4)
+
 
 
 
