@@ -144,6 +144,12 @@ python test_application/single_image_test.py
   --use_sar 
   --sar_path test_application/haze_img1_sar.jpg
 ```
+## Results 
+
+| Model                 | PSNR Val (dB) | SSIM val (%) |
+|:---------------------:|:-------------:|:------------:|
+| DCP+UNet vanilla      |    31.1815    |    93,98     |
+| DCP+SAR Enhanced UNet |     31.61     |    94.36     |
 
 
 ## Examples 
