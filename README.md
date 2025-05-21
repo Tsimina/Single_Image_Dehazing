@@ -194,9 +194,6 @@ For our experiments, we observed that the training curves tend to plateau around
 
 Compared to earlier methods such as AOD-Net (29.07 / 86.41%) or Deep DCP (24.32  / 93.42%), our approach benefits from the explicit use of a handcrafted prior while still leveraging the representational power of convolutional networks. Although transformer-based models like DehazeFormer report higher PSNR scores (e.g., 37.54 ), they typically require substantially more computational resources.
 
-By combining domain knowledge through priors with a modern encoder–decoder backbone, our model strikes a balance between interpretability, efficiency, and restoration quality in the image dehazing task.
-
-
 
 ## Examples 
 An example result of our Single Image Dehazing pipeline. The left image is the original hazy photograph, and the right image demonstrates the dehazing result produced by the UNet-based prior model.
