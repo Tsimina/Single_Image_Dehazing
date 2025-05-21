@@ -11,41 +11,6 @@ This project implements a prior-based deep learning method for removing haze fro
 - Process individual images or batches
 - Example script for quick testing on a single image
 
-## Model Details
-
-This repository contains two main dehazing architectures:
-
-- **UNet-DCP (vanilla):** A baseline U-Net model that uses the RGB input concatenated with a Dark Channel Prior (DCP) map to guide transmission estimation.
-
-- **UNet-DCP+SAR:** An extended multimodal variant that integrates a synthetic SAR reflectivity map alongside the RGB and DCP inputs, allowing the network to leverage both appearance-based and structure-aware priors for more robust dehazing, especially in challenging regions like sky or low-texture areas.
-
-
-Our dehazing network uses a UNet architecture to fuse multi-scale feature representations with haze-specific priors:
-
-- **Encoder:** Downsampling path extracts hierarchical features  
-- **Decoder:** Upsampling path restores spatial resolution and refines the dehazed output  
-- **Skip Connections:** Preserve fine details by connecting encoder and decoder layers  
-- **Prior Integration:** Dedicated modules inject haze priors (e.g., transmission map estimates) into intermediate feature maps  
-
-
-## Dataset 
-
-Our prior-based UNet models were trained on the RESIDE Beta dataset, using a total of 18,200 images covering diverse haze conditions and paired clean references. You can download the dataset here: [RESIDE Beta Dataset](https://utexas.app.box.com/s/25idwrsn890w03grdr6pls28cy38r91i). We used the OTS (Outdoor Training Set)for our application. 
-
-![reside_dataset](https://github.com/user-attachments/assets/8dde7f4b-95e6-4abe-a596-4425c0ab5067)
-
-In addition to the RGB images, we generate:
-
-- **Dark Channel Prior (DCP) maps**, computed directly from the hazy images using a local minimum filter.
-- **Synthetic SAR reflectivity maps**, created from the hazy images to simulate radar-like structural guidance. These maps are designed to mimic key SAR properties such as edge enhancement and speckle noise, and are used only in the `UNet-DCP+SAR` model.
-
-  ![sar_vs_gen](https://github.com/user-attachments/assets/0b24011d-9d2f-4e0e-8c72-b55c2a63acca)
-  
-> Figure: Left – Real SAR image from Sentinel-1. Right – Synthetic SAR-like map generated from a hazy RGB input using our edge-based simulation pipeline.
-
-
-All generated priors are saved and aligned with the input images to form multimodal input triplets: `[RGB_hazy, DCP, SAR]` for the SAR variant, and `[RGB_hazy, DCP]` for the baseline.
-
 ## Structure of the repo
 
 ```
@@ -62,6 +27,54 @@ Single_Image_Dehazing/
 └── results/    # Performance metrics in text files
 ```
 
+
+
+
+## Dataset 
+
+Our prior-based UNet models were trained on the RESIDE Beta dataset, using a total of 18,200 images covering diverse haze conditions and paired clean references. You can download the dataset here: [RESIDE Beta Dataset](https://utexas.app.box.com/s/25idwrsn890w03grdr6pls28cy38r91i). We used the OTS (Outdoor Training Set)for our application. 
+
+![reside_dataset](https://github.com/user-attachments/assets/8dde7f4b-95e6-4abe-a596-4425c0ab5067)
+
+In addition to the RGB images, we generate:
+
+- **Dark Channel Prior (DCP) maps**, computed directly from the hazy images using a local minimum filter.
+- **Synthetic SAR reflectivity maps**, created from the hazy images to simulate radar-like structural guidance. These maps are designed to mimic key SAR properties such as edge enhancement and speckle noise, and are used only in the `UNet-DCP+SAR` model.
+
+  ![sar_vs_gen](https://github.com/user-attachments/assets/0b24011d-9d2f-4e0e-8c72-b55c2a63acca)
+
+  To streamline data loading and ensure consistent alignment between modalities, we implemented a custom PyTorch `dataloader` that automatically maps each clear ground-truth image to its corresponding hazy version and associated prior maps (e.g., dark-channel and synthetic SAR). File matching is performed based on consistent filename stems, allowing the loader to construct structured input triplets \((I_{\text{hazy}}, D_{\text{dcp}}, S_{\text{sar}})\) and their corresponding target \(I_{\text{clear}}\) without manual intervention.
+
+  ![mapping](https://github.com/user-attachments/assets/b1ae3caa-eb3f-4a80-b04f-ab07ddf52737)
+
+  ![sar_dcp](https://github.com/user-attachments/assets/ee87f39e-05f4-4f43-bbf1-3657bbc67ffb)
+
+
+This modular loading scheme enables flexible switching between models: the DCP-only variant loads only RGB and dark-channel maps, while the DCP+SAR configuration additionally includes the SAR reflectivity channel. The `dataloader` handles all input formatting and tensor concatenation required for multimodal training and evaluation.
+
+  
+> Figure: Left – Real SAR image from Sentinel-1. Right – Synthetic SAR-like map generated from a hazy RGB input using our edge-based simulation pipeline.
+
+
+All generated priors are saved and aligned with the input images to form multimodal input triplets: `[RGB_hazy, DCP, SAR]` for the SAR variant, and `[RGB_hazy, DCP]` for the baseline.
+
+## Model Details
+
+This repository contains two main dehazing architectures:
+
+- **UNet-DCP (vanilla):** A baseline U-Net model that uses the RGB input concatenated with a Dark Channel Prior (DCP) map to guide transmission estimation.
+![dcp_vanilla](https://github.com/user-attachments/assets/47d38053-9990-4b3e-a594-4740b6efd758)
+
+- **UNet-DCP+SAR:** An extended multimodal variant that integrates a synthetic SAR reflectivity map alongside the RGB and DCP inputs, allowing the network to leverage both appearance-based and structure-aware priors for more robust dehazing, especially in challenging regions like sky or low-texture areas.
+![dcp_sar_sch](https://github.com/user-attachments/assets/0fe46bac-d20c-4fb0-adae-8e253801f003)
+
+
+Our dehazing network uses a UNet architecture to fuse multi-scale feature representations with haze-specific priors:
+
+- **Encoder:** Downsampling path extracts hierarchical features  
+- **Decoder:** Upsampling path restores spatial resolution and refines the dehazed output  
+- **Skip Connections:** Preserve fine details by connecting encoder and decoder layers  
+- **Prior Integration:** Dedicated modules inject haze priors (e.g., transmission map estimates) into intermediate feature maps 
 
 ## Requirements
 - Python 3.7 or later  
@@ -183,6 +196,10 @@ An example result of our Single Image Dehazing pipeline. The left image is the o
 For SAR-enhanced dehazing, the model leverages the additional SAR map (middle) to improve haze estimation and enhance detail recovery.
 
 ![dcp_unet](https://github.com/user-attachments/assets/e8852539-a54b-4209-9a4a-f293a96a5c60)
+
+> [!IMPORTANT]  
+> To evaluate the `DCP-SAR` model, you need not only the hazy RGB input image, but also its corresponding **synthetic SAR-like reflectivity map**. This additional channel provides structural guidance during inference and must be precomputed for each test image.
+
 
 Due to the characteristics of the dataset, which contains relatively few examples with extremely dense haze, the model tends to generalize better to scenes with moderate atmospheric degradation. As a result, in challenging test cases, the dehazing is significantly more effective in the foreground—where contrast and structure are more pronounced—while distant background regions, such as the sky or horizon, remain partially veiled or exhibit residual artifacts. This behavior can be observed in the qualitative example, where the subject and immediate surroundings are clearly restored, while distant elements are only partially recovered.
 
