@@ -47,7 +47,9 @@ In addition to the RGB images, we generate:
 
   ![sar_vs_gen](https://github.com/user-attachments/assets/0b24011d-9d2f-4e0e-8c72-b55c2a63acca)
 
-  To streamline data loading and ensure consistent alignment between modalities, we implemented a custom PyTorch `dataloader` that automatically maps each clear ground-truth image to its corresponding hazy version and associated prior maps (e.g., dark-channel and synthetic SAR). File matching is performed based on consistent filename stems, allowing the loader to construct structured input triplets \((I_{\text{hazy}}, D_{\text{dcp}}, S_{\text{sar}})\) and their corresponding target \(I_{\text{clear}}\) without manual intervention.
+  > Figure: Left – Real SAR image from Sentinel-1. Right – Synthetic SAR-like map generated from a hazy RGB input using our edge-based simulation pipeline.
+
+  To streamline data loading and ensure consistent alignment between modalities, we implemented a custom PyTorch `dataloader` that automatically maps each clear ground-truth image to its corresponding hazy version and associated prior maps (e.g., dark-channel and synthetic SAR). File matching is performed based on consistent filename stems, allowing the loader to construct structured input triplets hazy, sar and their corresponding target clear without manual intervention.
 
   ![mapping](https://github.com/user-attachments/assets/b1ae3caa-eb3f-4a80-b04f-ab07ddf52737)
 
