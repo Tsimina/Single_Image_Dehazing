@@ -184,6 +184,14 @@ For SAR-enhanced dehazing, the model leverages the additional SAR map (middle) t
 
 ![dcp_unet](https://github.com/user-attachments/assets/e8852539-a54b-4209-9a4a-f293a96a5c60)
 
+Due to the characteristics of the dataset, which contains relatively few examples with extremely dense haze, the model tends to generalize better to scenes with moderate atmospheric degradation. As a result, in challenging test cases, the dehazing is significantly more effective in the foreground—where contrast and structure are more pronounced—while distant background regions, such as the sky or horizon, remain partially veiled or exhibit residual artifacts. This behavior can be observed in the qualitative example, where the subject and immediate surroundings are clearly restored, while distant elements are only partially recovered.
+
+
+In scenes where haze is distributed more uniformly and without extreme density gradients, the model performs noticeably better. The dehazed output shows improved overall clarity, with fewer visible artifacts and more natural color reconstruction. In such cases, transmission estimation is more stable across the image, leading to smoother results and better preservation of global structure. As illustrated in the example, both foreground and background regions are effectively restored, and block artifacts are significantly reduced.
+
+![uniform haze](https://github.com/user-attachments/assets/87d6101a-b6ea-4c16-abcd-f9bc19116025)
+
+
 ## Limitations
 
 Due to limited hardware resources (e.g., GPU memory and compute), model training and inference were constrained, which may affect performance and image quality.
