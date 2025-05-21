@@ -187,10 +187,15 @@ python test_application/single_image_test.py
 
 For our experiments, we observed that the training curves tend to plateau around epoch 20, indicating convergence of both reconstruction loss and perceptual metrics such as PSNR and SSIM. All models were trained using an NVIDIA GTX 1660 Ti GPU, with a typical training duration of approximately 4, up to 6 hours when following our proposed methodology and input configuration. 
 
-| Model                 | PSNR val (dB) | SSIM val (%) |
+| Model                 | PSNR val      | SSIM val (%) |
 |:---------------------:|:-------------:|:------------:|
 | DCP+UNet vanilla      |    31.1815    |    93,98     |
-| DCP+SAR Enhanced UNet |     31.61     |    94.36     |
+| DCP-SAR Enhanced UNet |     31.61     |    94.36     |
+
+Compared to earlier methods such as AOD-Net (29.07 / 86.41%) or Deep DCP (24.32  / 93.42%), our approach benefits from the explicit use of a handcrafted prior while still leveraging the representational power of convolutional networks. Although transformer-based models like DehazeFormer report higher PSNR scores (e.g., 37.54 ), they typically require substantially more computational resources.
+
+By combining domain knowledge through priors with a modern encoder–decoder backbone, our model strikes a balance between interpretability, efficiency, and restoration quality in the image dehazing task.
+
 
 
 ## Examples 
