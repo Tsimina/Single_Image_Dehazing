@@ -146,6 +146,8 @@ python test_application/single_image_test.py
 ```
 ## Perfromance
 
+For our experiments, we observed that the training curves tend to plateau around epoch 20, indicating convergence of both reconstruction loss and perceptual metrics such as PSNR and SSIM. All models were trained using an NVIDIA GTX 1660 Ti GPU, with a typical training duration of approximately 4, up to 6 hours when following our proposed methodology and input configuration. 
+
 | Model                 | PSNR val (dB) | SSIM val (%) |
 |:---------------------:|:-------------:|:------------:|
 | DCP+UNet vanilla      |    31.1815    |    93,98     |
