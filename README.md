@@ -2,7 +2,11 @@
 
 
 ## Description
-This project implements a prior-based deep learning method for removing haze from a single input image. We leverage traditional image dehazing priors integrated into a UNet architecture, combining the strengths of classical priors with modern convolutional networks. The goal is to restore clarity, contrast, and color fidelity in photographs affected by natural or artificial fog.
+This project implements a prior-guided deep learning approach for single-image dehazing. We integrate the Dark Channel Prior (DCP) — a widely used handcrafted heuristic — directly into a U-Net architecture by embedding it as an additional input channel. This design allows the model to benefit from both traditional dehazing cues and learned convolutional features.
+
+The goal is to restore visual clarity, contrast, and color fidelity in hazy or fog-degraded images, using a lightweight and interpretable architecture. Our method bridges classical priors with modern deep learning, improving performance especially in challenging regions where appearance-based cues alone may fail.
+
+We also explore a multimodal variant that incorporates a synthetic SAR-like reflectivity map alongside the RGB and DCP inputs. This structural channel provides depth-aware guidance and helps the network disambiguate haze in regions such as the sky or low-texture surfaces, where handcrafted priors alone are often unreliable.
 
 ## Features 
 - Prior-based dehazing models built on a UNet backbone
