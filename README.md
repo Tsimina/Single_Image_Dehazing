@@ -13,6 +13,13 @@ This project implements a prior-based deep learning method for removing haze fro
 
 ## Model Details
 
+This repository contains two main dehazing architectures:
+
+- **UNet-DCP (vanilla):** A baseline U-Net model that uses the RGB input concatenated with a Dark Channel Prior (DCP) map to guide transmission estimation.
+
+- **UNet-DCP+SAR:** An extended multimodal variant that integrates a synthetic SAR reflectivity map alongside the RGB and DCP inputs, allowing the network to leverage both appearance-based and structure-aware priors for more robust dehazing, especially in challenging regions like sky or low-texture areas.
+
+
 Our dehazing network uses a UNet architecture to fuse multi-scale feature representations with haze-specific priors:
 
 - **Encoder:** Downsampling path extracts hierarchical features  
@@ -24,6 +31,18 @@ Our dehazing network uses a UNet architecture to fuse multi-scale feature repres
 ## Dataset 
 
 Our prior-based UNet models were trained on the RESIDE Beta dataset, using a total of 18,200 images covering diverse haze conditions and paired clean references. You can download the dataset here: [RESIDE Beta Dataset](https://utexas.app.box.com/s/25idwrsn890w03grdr6pls28cy38r91i). We used the OTS (Outdoor Training Set)for our application. 
+
+![reside_dataset](https://github.com/user-attachments/assets/8dde7f4b-95e6-4abe-a596-4425c0ab5067)
+
+In addition to the RGB images, we generate:
+
+- **Dark Channel Prior (DCP) maps**, computed directly from the hazy images using a local minimum filter.
+- **Synthetic SAR reflectivity maps**, created from the hazy images to simulate radar-like structural guidance. These maps are designed to mimic key SAR properties such as edge enhancement and speckle noise, and are used only in the `UNet-DCP+SAR` model.
+
+  ![sar_vs_gen](https://github.com/user-attachments/assets/0b24011d-9d2f-4e0e-8c72-b55c2a63acca)
+
+
+All generated priors are saved and aligned with the input images to form multimodal input triplets: `[RGB_hazy, DCP, SAR]` for the SAR variant, and `[RGB_hazy, DCP]` for the baseline.
 
 ## Structure of the repo
 
