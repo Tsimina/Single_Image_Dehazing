@@ -40,6 +40,8 @@ In addition to the RGB images, we generate:
 - **Synthetic SAR reflectivity maps**, created from the hazy images to simulate radar-like structural guidance. These maps are designed to mimic key SAR properties such as edge enhancement and speckle noise, and are used only in the `UNet-DCP+SAR` model.
 
   ![sar_vs_gen](https://github.com/user-attachments/assets/0b24011d-9d2f-4e0e-8c72-b55c2a63acca)
+  
+> Figure: Left – Real SAR image from Sentinel-1. Right – Synthetic SAR-like map generated from a hazy RGB input using our edge-based simulation pipeline.
 
 
 All generated priors are saved and aligned with the input images to form multimodal input triplets: `[RGB_hazy, DCP, SAR]` for the SAR variant, and `[RGB_hazy, DCP]` for the baseline.
