@@ -64,9 +64,12 @@ This repository contains two main dehazing architectures:
 
 - **UNet-DCP (vanilla):** A baseline U-Net model that uses the RGB input concatenated with a Dark Channel Prior (DCP) map to guide transmission estimation.
 
+
 ![dcp_vanilla](https://github.com/user-attachments/assets/47d38053-9990-4b3e-a594-4740b6efd758)
 
 - **UNet-DCP+SAR:** An extended multimodal variant that integrates a synthetic SAR reflectivity map alongside the RGB and DCP inputs, allowing the network to leverage both appearance-based and structure-aware priors for more robust dehazing, especially in challenging regions like sky or low-texture areas.
+
+  
 ![dcp_sar_sch](https://github.com/user-attachments/assets/0fe46bac-d20c-4fb0-adae-8e253801f003)
 
 
