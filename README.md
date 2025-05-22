@@ -188,10 +188,10 @@ python single_image_test.py --image <haze_img> --model saved_models/<model_name>
 
 For our experiments, we observed that the training curves tend to plateau around epoch 20, indicating convergence of both reconstruction loss and perceptual metrics such as PSNR and SSIM. All models were trained using an NVIDIA GTX 1660 Ti GPU, with a typical training duration of approximately 4, up to 6 hours when following our proposed methodology and input configuration. 
 
-| Model                 | PSNR val      | SSIM val (%) | Inference Time (s) |
-|:---------------------:|:-------------:|:------------:|:------------------:|
-| DCP U-Net vanilla     |    31.1815    |    93,98     |       0.2165       |
-| DCP-SAR Enhanced U-Net|     31.61     |    94.36     |       0.2599       |
+| Model                 | PSNR val      | SSIM val (%) | Inference Time (ms) |
+|:---------------------:|:-------------:|:------------:|:-------------------:|
+| DCP U-Net vanilla     |    31.1815    |    93,98     |       61.62         |
+| DCP-SAR Enhanced U-Net|     31.61     |    94.36     |       73.97         |
 
 Compared to earlier methods such as AOD-Net (29.07 / 86.41%) or Deep DCP (24.32  / 93.42%), our approach benefits from the explicit use of a handcrafted prior while still leveraging the representational power of convolutional networks. Although transformer-based models like DehazeFormer report higher PSNR scores (e.g., 37.54 ), they typically require substantially more computational resources.
 
