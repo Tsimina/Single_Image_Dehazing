@@ -56,7 +56,7 @@ To streamline data loading and ensure consistent alignment between modalities, w
   ![sar_dcp](https://github.com/user-attachments/assets/ee87f39e-05f4-4f43-bbf1-3657bbc67ffb)
 
 
-This modular loading scheme enables flexible switching between models: the DCP-only variant loads only RGB and dark-channel maps, while the DCP+SAR configuration additionally includes the SAR reflectivity channel. The `dataloader` handles all input formatting and tensor concatenation required for multimodal training and evaluation.
+This modular loading scheme enables flexible switching between models: the DCP-only variant loads only hazy RGB and dark-channel maps, while the DCP+SAR configuration additionally includes the SAR reflectivity channel. The `dataloader` handles all input formatting and tensor concatenation required for multimodal training and evaluation.
 
 
 ## Model Details
@@ -66,12 +66,13 @@ This repository contains two main dehazing architectures:
 - **UNet-DCP (vanilla):** A baseline U-Net model that uses the RGB input concatenated with a Dark Channel Prior (DCP) map to guide transmission estimation.
 
 
-![dcp_vanilla](https://github.com/user-attachments/assets/47d38053-9990-4b3e-a594-4740b6efd758)
+![dcp_vanilla](https://github.com/user-attachments/assets/54a213c4-d5d9-4d52-b706-df3aa08a414a)
+
 
 - **UNet-DCP+SAR:** An extended multimodal variant that integrates a synthetic SAR reflectivity map alongside the RGB and DCP inputs, allowing the network to leverage both appearance-based and structure-aware priors for more robust dehazing, especially in challenging regions like sky or low-texture areas.
 
   
-![dcp_sar_sch](https://github.com/user-attachments/assets/0fe46bac-d20c-4fb0-adae-8e253801f003)
+![dcp_sar_sch](https://github.com/user-attachments/assets/2e03974c-a54b-4e86-8e83-66e66113ded8)
 
 
 Our dehazing network uses a UNet architecture to fuse multi-scale feature representations with haze-specific priors:
@@ -125,11 +126,7 @@ pip install -r requirements.txt
 Resize dataset images to 256×256 to ensure consistency:
 
 ```
-python -m dataset.resize 
-  --input dataset/ 
-  --output dataset/resized 
-  --width 256
-  --height 256
+python -m dataset.resize  --input dataset/ --output dataset/resized --width 256 --height 256
 ```
 > [!NOTE] 
 > The size argumet was set to 256 by default.
@@ -139,9 +136,7 @@ python -m dataset.resize
 Generate SAR maps for SAR-based models, using the hazy dataset:
 
 ```
-python dataset/sar_img_gen.py
---input_dir dataset/hazy
---output_dir dataset/hazy_sar
+python dataset/sar_img_gen.py --input_dir dataset/hazy --output_dir dataset/hazy_sar
 ```
 
 > [!NOTE] 
@@ -155,11 +150,23 @@ DCP+SAR model
 python -m src.train_dcp_sar
 
 # UNet with priors
-python -m src.train
+python -m src.train_dcp_unet
 ```
-
 > [!NOTE] 
-> The training scripts use the dataloader.py and dataloader_sar.py  to map the hazy groundthruth images correspodingly to their clear counterparts.
+> The training scripts use the dataloader.py and dataloader_sar.py  to map the hazy ground-thruth images correspodingly to their clear counterparts.
+
+# Inference
+
+```
+#UNet 
+python src/inference.py --model test_application/saved_models/<model_path> --input_dir src/haze --output_dir src/results --model_type unet 
+
+# DCP-SAR Guided
+python src/inference.py --model test_application/saved_models/<model_path> --input_dir src/haze --output_dir src/results --model_type sar_unet --sar_dir src/sar
+```
+> [!NOTE] 
+> For the inference sripts (specifically the SAR model) the image names should have the next structure <img_name>_sar. You cand also specify the extension of the image with the argument `--sar_ext` (the default being set to .png).
+
 
 ## Testing (Single Image)
 
@@ -167,21 +174,16 @@ python -m src.train
 For DCP+UNet vanilla architecture
 
 ```
-python single_image_test.py 
-  --input test/haze_img2.jpg 
-  --output results/dehazed_img2.jpg 
-  --model model/unet_dehaze_prior.pth
+cd test_application
+python single_image_test.py --image <haze_img> --model saved_models/<model_name> --device cuda
 ```
 
 **SAR-Enhanced**
 For SAR enhanced DCP architecture
 
 ```
-python test_application/single_image_test.py 
-  --image test_application/haze_img1.jpg 
-  --model test_application/dehazing_unet_sar_30.pth 
-  --use_sar 
-  --sar_path test_application/haze_img1_sar.jpg
+cd test_application
+python single_image_test.py --image <haze_img> --model saved_models/<model_name> --use_sar  --sar_path <path_to_reflective_sar_map>
 ```
 ## Perfromance
 
