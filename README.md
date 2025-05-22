@@ -156,11 +156,23 @@ DCP+SAR model
 python -m src.train_dcp_sar
 
 # UNet with priors
-python -m src.train
+python -m src.train_dcp_unet
 ```
-
 > [!NOTE] 
 > The training scripts use the dataloader.py and dataloader_sar.py  to map the hazy groundthruth images correspodingly to their clear counterparts.
+
+# Inference
+
+```
+#UNet 
+python src/inference.py --model test_application/saved_models/model_dcp_unet_20.pth --input_dir src/haze --output_dir src/results --model_type unet 
+
+# DCP-SAR Guided
+python src/inference.py --model test_application/saved_models/dehazing_unet_sar_20.pth --input_dir src/haze --output_dir src/results --model_type sar_unet --sar_dir src/sar
+```
+> [!NOTE] 
+> For the inference sripts (specifically the SAR model) the image names should have the next structure <img_name>_sar. You cand also specify the extension of the image with the argument `--sar_ext` (the default being set to .png).
+
 
 ## Testing (Single Image)
 
