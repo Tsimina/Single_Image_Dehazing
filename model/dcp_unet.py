@@ -8,7 +8,7 @@ def get_dark_channel(img_tensor, window_size=15):
     dark = -F.max_pool2d(-min_rgb, kernel_size=window_size, stride=1, padding=window_size // 2)
     return dark
 
-# === UNet with DCP as===
+# === UNet with DCP ===
 class UNetBlock(nn.Module):
     def __init__(self, in_channels, out_channels):
         super().__init__()

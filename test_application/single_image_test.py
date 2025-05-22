@@ -21,7 +21,7 @@ def visualize_dehazed_image(image_path, model_path, device, use_sar=False, sar_p
 
     if use_sar:
         if sar_path is None:
-            raise ValueError("Trebuie să specifici --sar_path pentru modelul SAR!")
+            raise ValueError("Specify the SAR image path when using SAR.")
         transform_sar = transforms.Compose([
             transforms.Resize((256, 256)),
             transforms.ToTensor()
@@ -50,11 +50,11 @@ def visualize_dehazed_image(image_path, model_path, device, use_sar=False, sar_p
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--image", type=str, required=True, help="Calea către imaginea hazy")
-    parser.add_argument("--model", type=str, required=True, help="Calea către modelul salvat")
-    parser.add_argument("--use_sar", action="store_true", help="Folosește modelul cu SAR")
-    parser.add_argument("--sar_path", type=str, help="Calea către imaginea SAR (dacă folosești SAR)")
-    parser.add_argument("--device", type=str, default="cuda", help="cuda sau cpu")
+    parser.add_argument("--image", type=str, required=True, help="Hazy img path")
+    parser.add_argument("--model", type=str, required=True, help="Saved model path")
+    parser.add_argument("--use_sar", action="store_true", help="Use SAR mode")
+    parser.add_argument("--sar_path", type=str, help="SAR img path")
+    parser.add_argument("--device", type=str, default="cuda", help="cuda or cpu")
     args = parser.parse_args()
 
 # Block for running the script

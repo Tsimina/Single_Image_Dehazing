@@ -15,7 +15,7 @@ def tensor_to_numpy(tensor):
         tensor = tensor[0]
     return tensor.permute(1,2,0).cpu().numpy()
 
-# Transorm for RGB și SAR
+# Transorm for RGB and SAR
 transform_rgb = transforms.Compose([
     transforms.Resize((256, 256)),
     transforms.ToTensor(),
@@ -130,7 +130,7 @@ for epoch in range(epochs):
 
     print(f"Epoch {epoch+1} Train Loss: {avg_loss:.4f} ")
 
-# Scrie doar rezultatele finale (ultima epocă)
+# Results
 with open(results_path, "a") as f:
     f.write(f"=== Final results ===\n")
     f.write(f"Train Loss: {avg_loss:.4f}\n")

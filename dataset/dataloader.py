@@ -44,15 +44,13 @@ class MultiHazyDataset(Dataset):
 
 
 def get_loaders(root_dir, batch_size=8, val_ratio=0.2, test_ratio=0.1, num_workers=2, transform=None):
-    """
-    Returnează trei DataLoader-e pentru train, val și test.
-    """
+
     ds = MultiHazyDataset(root_dir, transform)
     n = len(ds)
     n_val = int(val_ratio * n)
     n_test = int(test_ratio * n)
     n_train = n - n_val - n_test
-    if n_train < 1: raise ValueError("Nu sunt suficiente exemple pentru train")
+    if n_train < 1: raise ValueError("Not enough data for training")
     train_ds, val_ds, test_ds = random_split(ds, [n_train, n_val, n_test])
     train_loader = DataLoader(train_ds, batch_size=batch_size, shuffle=True, num_workers=num_workers, pin_memory=True)
     val_loader   = DataLoader(val_ds,   batch_size=batch_size, shuffle=False, num_workers=num_workers, pin_memory=True)

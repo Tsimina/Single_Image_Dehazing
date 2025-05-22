@@ -8,7 +8,6 @@ def resize_image(input_path, output_path, size=(256, 256)):
         print(f"Opening image: {input_path}")
         with Image.open(input_path) as img:
             img = img.convert('RGB')  # Ensure consistent format
-            # Use LANCZOS resampling instead of deprecated ANTIALIAS
             img_resized = img.resize(size, resample=Image.LANCZOS)
             img_resized.save(output_path)
             print(f"Resized and saved: {output_path}")

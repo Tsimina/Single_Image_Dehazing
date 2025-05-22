@@ -82,7 +82,7 @@ def evaluate_model(loader):
         'MAE': mae_sum/count if count else 0
     }
 
-#
+# Training
 epochs = 20
 for epoch in range(1, epochs+1):
     model.train()
@@ -110,5 +110,5 @@ with open('training_results_dcp_sar_unet.txt', 'w') as f:
         f.write(f"Val {name}: {value:.4f}\n")
 print("Metrics saved to training_results.txt")
 
-# Salvare model
+# Save model
 torch.save(model.state_dict(), "model_dcp_unet.pth")
