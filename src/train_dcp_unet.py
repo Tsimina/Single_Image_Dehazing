@@ -9,24 +9,33 @@ from dataset.dataloader import get_loaders
 from model.dcp_unet import DehazingUNet
 from skimage.metrics import mean_squared_error
 
-
-# Transform for RGB
+""" 
+Define the image transformation pipeline for RGB images.
+Converts images to PyTorch tensors.
+"""
 transform = transforms.Compose([
     transforms.ToTensor(),
 ])
 
-# Load data
+"""
+Load the training, validation, and test data loaders.
+Splits the dataset according to the specified ratios.
+"""
 train_loader, val_loader, test_loader = get_loaders(
     root_dir="dataset/images", batch_size=4, val_ratio=0.2, test_ratio=0.1,
     num_workers=0, transform=transform
 )
 
-# Split dim
+"""
+Print the number of samples in each split for verification.
+"""
 print(f" train: {len(train_loader.dataset)}")
 print(f" val:   {len(val_loader.dataset)}")
 print(f" test:  {len(test_loader.dataset)}")
 
-
+"""
+Visualize a sample hazy and clear image from the training set.
+"""
 hazy_batch, clear_batch = next(iter(train_loader))
 hazy_img = hazy_batch[0].permute(1,2,0).cpu().numpy()
 clear_img = clear_batch[0].permute(1,2,0).cpu().numpy()
@@ -41,19 +50,29 @@ plt.axis('off')
 plt.imshow(clear_img)
 plt.show()
 
-# Model + optimizer + loss
+"""
+Initialize the model, optimizer, and loss function.
+Move the model to GPU if available.
+"""
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 model = DehazingUNet().to(device)
 optimizer = Adam(model.parameters(), lr=1e-4)
 criterion = L1Loss()
 
+"""
+Helper function to convert a tensor to a NumPy array for visualization or metric computation.
+Handles both batch and single image tensors.
+"""
 def tensor_to_numpy(tensor):
     # Batch
     if tensor.dim() == 4:
         tensor = tensor[0]  
     return tensor.permute(1,2,0).cpu().numpy()
 
-# Evaluate model
+"""
+Evaluate the model on a given data loader.
+Computes PSNR, SSIM, MSE, and MAE metrics for the dataset.
+"""
 def evaluate_model(loader):
     model.eval()
     psnr_sum = 0.0
@@ -82,7 +101,10 @@ def evaluate_model(loader):
         'MAE': mae_sum/count if count else 0
     }
 
-# Training
+"""
+Main training loop.
+Trains the model for a specified number of epochs and prints the average loss per epoch.
+"""
 epochs = 20
 for epoch in range(1, epochs+1):
     model.train()
@@ -98,6 +120,10 @@ for epoch in range(1, epochs+1):
     avg_loss = total_loss/len(train_loader)
     print(f"Epoch {epoch}/{epochs} – Loss: {avg_loss:.4f}")
 
+"""
+Evaluate the model on the training and validation sets after training.
+Save the metrics to a text file.
+"""
 train_metrics = evaluate_model(train_loader)
 val_metrics = evaluate_model(val_loader)
 
@@ -110,5 +136,7 @@ with open('training_results_dcp_sar_unet.txt', 'w') as f:
         f.write(f"Val {name}: {value:.4f}\n")
 print("Metrics saved to training_results.txt")
 
-# Save model
+"""
+Save the trained model weights to a file.
+"""
 torch.save(model.state_dict(), "model_dcp_unet.pth")

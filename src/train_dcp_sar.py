@@ -10,12 +10,16 @@ import numpy as np
 from skimage.metrics import peak_signal_noise_ratio, structural_similarity
 import matplotlib.pyplot as plt
 
+""" 
+Helper function to convert a tensor to a NumPy array for visualization or metric computation.
+Handles both batch and single image tensors.
+"""
 def tensor_to_numpy(tensor):
     if tensor.dim() == 4:
         tensor = tensor[0]
     return tensor.permute(1,2,0).cpu().numpy()
 
-# Transorm for RGB and SAR
+# Transformations for RGB and SAR images: resize and convert to tensor
 transform_rgb = transforms.Compose([
     transforms.Resize((256, 256)),
     transforms.ToTensor(),
@@ -25,14 +29,14 @@ transform_sar = transforms.Compose([
     transforms.ToTensor(),
 ])
 
-# SAR dataset
+# Load SAR dataset with paired RGB and SAR images
 dataset = MultiHazySARDataset(
     root_dir="dataset/images",
     transform_rgb=transform_rgb,
     transform_sar=transform_sar
 )
 
-# Split train/val/test
+# Split dataset into train, validation, and test sets
 n = len(dataset)
 val_ratio = 0.2
 test_ratio = 0.1
@@ -42,11 +46,12 @@ n_train = n - n_val - n_test
 train_ds, val_ds, test_ds = random_split(dataset, [n_train, n_val, n_test])
 print(f"Train: {len(train_ds)}, Val: {len(val_ds)}, Test: {len(test_ds)}")
 
+# Create data loaders for each split
 train_loader = DataLoader(train_ds, batch_size=4, shuffle=True, num_workers=0)
 val_loader = DataLoader(val_ds, batch_size=4, shuffle=False, num_workers=0)
 test_loader = DataLoader(test_ds, batch_size=4, shuffle=False, num_workers=0)
 
-# Display a sample triple (hazy, sar, clear)
+# Display a sample triple (hazy, sar, clear) from the dataset
 sample_hazy, sample_sar, sample_clear = dataset[0]
 print("Hazy shape:", sample_hazy.shape)
 print("SAR shape:", sample_sar.shape)
@@ -64,17 +69,22 @@ for ax in axs:
 plt.tight_layout()
 plt.show()
 
-# Model
+# Initialize model, optimizer, and loss function
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 model = DehazingUNet(use_sar=True).to(device)
 optimizer = torch.optim.Adam(model.parameters(), lr=1e-4)
 criterion = nn.L1Loss()
 
+# Prepare results file
 results_path = "training_results_sar.txt"
 if not os.path.exists(results_path):
     with open(results_path, "w") as f:
         f.write("=== Training Metrics per Epoch ===\n")
 
+""" 
+Evaluate the model on a given data loader.
+Computes loss, PSNR, SSIM, MSE, and MAE metrics for the dataset.
+"""
 def evaluate_model(loader):
     model.eval()
     total_loss = 0.0
@@ -109,7 +119,7 @@ def evaluate_model(loader):
         'MAE': mae_sum/count if count else 0
     }
 
-# Saved model path contains the number of epochs as extension
+# Main training loop
 epochs = 20
 for epoch in range(epochs):
     model.train()
@@ -129,7 +139,7 @@ for epoch in range(epochs):
 
     print(f"Epoch {epoch+1} Train Loss: {avg_loss:.4f} ")
 
-# Results
+# Save final results to file
 with open(results_path, "a") as f:
     f.write(f"=== Final results ===\n")
     f.write(f"Train Loss: {avg_loss:.4f}\n")
@@ -140,5 +150,6 @@ with open(results_path, "a") as f:
     f.write(f"Test PSNR: {test_metrics['PSNR']:.2f} | Test SSIM: {test_metrics['SSIM']:.4f} | "
             f"Test MSE: {test_metrics['MSE']:.6f} | Test MAE: {test_metrics['MAE']:.6f}\n\n")
 
+# Save the trained model weights
 torch.save(model.state_dict(), "model_unet_sar.pth")
 print("Model saved: model_unet_sar.pth")

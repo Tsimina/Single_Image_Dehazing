@@ -1,5 +1,6 @@
 import sys
 import os
+# Add parent directory to sys.path for module imports
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 import argparse
@@ -10,16 +11,29 @@ import matplotlib.pyplot as plt
 from PIL import Image
 from model.dcp_sar_unet import DehazingUNet as DehazingModel
 
-# Function to visualize the dehazed image
+"""
+Function to visualize the dehazed image.
+Loads the hazy image (and SAR image if needed), runs the model, and displays the result.
+"""
 def visualize_dehazed_image(image_path, model_path, device, use_sar=False, sar_path=None):
+    """
+    image_path: Path to the hazy RGB image.
+    model_path: Path to the trained model weights.
+    device: Device to run inference on.
+    use_sar: Whether to use SAR input.
+    sar_path: Path to the SAR image (if use_sar is True).
+    """
+    # Define transformation for RGB image
     transform_rgb = transforms.Compose([
         transforms.Resize((256, 256)),
         transforms.ToTensor()
     ])
+    # Load and preprocess the hazy RGB image
     image = Image.open(image_path).convert("RGB")
     input_tensor = transform_rgb(image).unsqueeze(0).to(device)
 
     if use_sar:
+        # If SAR is used, load and preprocess SAR image
         if sar_path is None:
             raise ValueError("Specify the SAR image path when using SAR.")
         transform_sar = transforms.Compose([
@@ -28,18 +42,21 @@ def visualize_dehazed_image(image_path, model_path, device, use_sar=False, sar_p
         ])
         sar = Image.open(sar_path).convert("L")
         sar_tensor = transform_sar(sar).unsqueeze(0).to(device)
+        # Load model with SAR support
         model = DehazingModel(use_sar=True).to(device)
         model.load_state_dict(torch.load(model_path, map_location=device))
         model.eval()
         with torch.no_grad():
             output = model(input_tensor, sar_tensor)
     else:
+        # Load model without SAR
         model = DehazingModel(use_sar=False).to(device)
         model.load_state_dict(torch.load(model_path, map_location=device))
         model.eval()
         with torch.no_grad():
             output = model(input_tensor)
 
+    # Concatenate input and output for visualization
     images_to_show = torch.cat([input_tensor, output], dim=0).cpu()
     grid = make_grid(images_to_show, nrow=2)
     plt.figure(figsize=(10, 5))
@@ -49,6 +66,9 @@ def visualize_dehazed_image(image_path, model_path, device, use_sar=False, sar_p
     plt.show()
 
 if __name__ == "__main__":
+    """
+    Parse command-line arguments and run the visualization function.
+    """
     parser = argparse.ArgumentParser()
     parser.add_argument("--image", type=str, required=True, help="Hazy img path")
     parser.add_argument("--model", type=str, required=True, help="Saved model path")
@@ -57,7 +77,7 @@ if __name__ == "__main__":
     parser.add_argument("--device", type=str, default="cuda", help="cuda or cpu")
     args = parser.parse_args()
 
-# Block for running the script
+    # Set device and run visualization
     device = torch.device(args.device if torch.cuda.is_available() else "cpu")
     visualize_dehazed_image(
         image_path=args.image,

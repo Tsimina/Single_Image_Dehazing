@@ -2,7 +2,9 @@ import os
 import argparse
 from PIL import Image
 
-
+"""
+Resize a single image to the specified size and save it to the output path.
+"""
 def resize_image(input_path, output_path, size=(256, 256)):
     try:
         print(f"Opening image: {input_path}")
@@ -14,7 +16,10 @@ def resize_image(input_path, output_path, size=(256, 256)):
     except Exception as e:
         print(f"Error processing {input_path}: {e}")
 
-
+"""
+Process all images in a directory (recursively), resizing them and saving to the output directory.
+Preserves subfolder structure and skips non-image files.
+"""
 def process_directory(input_dir, output_dir, size=(256, 256), extensions=None):
     if not os.path.exists(input_dir):
         print(f"Input directory does not exist: {input_dir}")
@@ -41,7 +46,9 @@ def process_directory(input_dir, output_dir, size=(256, 256), extensions=None):
             else:
                 print(f"Skipping non-image file: {filename}")
 
-
+"""
+Main function to parse command-line arguments and start the resizing process.
+"""
 def main():
     parser = argparse.ArgumentParser(description="Resize all images in a directory to a given size, preserving original names.")
     parser.add_argument('input_dir', help='Path to the input directory containing images')
@@ -53,7 +60,6 @@ def main():
     size = (args.width, args.height)
     print(f"Target size: {size[0]}x{size[1]}")
     process_directory(args.input_dir, args.output_dir, size)
-
 
 if __name__ == '__main__':
     main()

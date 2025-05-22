@@ -1,58 +1,70 @@
 # dataloader.py
 import os
-import glob
-from PIL import Image
-import torch
 from torch.utils.data import Dataset, DataLoader, random_split
 from torchvision import transforms
+from PIL import Image
 
-class MultiHazyDataset(Dataset):
-    """
+"""
+Custom dataset for loading paired hazy and clear images.
+Assumes directory structure:
     root_dir/
-        clear/ — ground truth (e.g. 3068.jpg)
-        hazy/  — hazy (e.g. 3068_0.8_0.1.jpg)
-    """
-    def __init__(self, root_dir, transform=None, clear_ext="jpg", haze_exts=("jpg", "png")):
-        clear_dir = os.path.join(root_dir, "clear_rsz")
-        haze_dir  = os.path.join(root_dir, "hazy_rsz")
-        assert os.path.isdir(clear_dir) and os.path.isdir(haze_dir), "Structura folderelor invalidă"
+        hazy/
+        clear/
+"""
+class HazyClearDataset(Dataset):
+    def __init__(self, root_dir, transform=None):
+        """
+        root_dir: Path to the dataset root directory.
+        transform: Optional torchvision transforms to apply to images, if they are not resized to 256x256
+        """
+        self.root_dir = root_dir
         self.transform = transform
-        self.pairs = []
-        # map clear stems to paths
-        clear_map = {}
-        for cp in glob.glob(os.path.join(clear_dir, f"*.{clear_ext}")):
-            stem = os.path.splitext(os.path.basename(cp))[0]
-            clear_map[stem] = cp
-        # flatten hazy images
-        for hp in glob.glob(os.path.join(haze_dir, "*_*.*")):
-            stem = os.path.basename(hp).split('_')[0]
-            if stem in clear_map:
-                self.pairs.append((hp, clear_map[stem]))
-        assert self.pairs, "Nu există nicio pereche validă"
+        self.hazy_dir = os.path.join(root_dir, "hazy")
+        self.clear_dir = os.path.join(root_dir, "clear")
+        # List all image files in hazy directory
+        self.hazy_files = sorted([
+            f for f in os.listdir(self.hazy_dir)
+            if os.path.isfile(os.path.join(self.hazy_dir, f))
+        ])
 
     def __len__(self):
-        return len(self.pairs)
+        """Return the number of samples in the dataset."""
+        return len(self.hazy_files)
 
     def __getitem__(self, idx):
-        hp, cp = self.pairs[idx]
-        hazy = Image.open(hp).convert("RGB")
-        clear = Image.open(cp).convert("RGB")
+        """
+        Load and return a sample (hazy image, clear image) as tensors.
+        """
+        hazy_path = os.path.join(self.hazy_dir, self.hazy_files[idx])
+        clear_path = os.path.join(self.clear_dir, self.hazy_files[idx])
+        hazy_img = Image.open(hazy_path).convert("RGB")
+        clear_img = Image.open(clear_path).convert("RGB")
         if self.transform:
-            hazy = self.transform(hazy)
-            clear = self.transform(clear)
-        return hazy, clear
+            hazy_img = self.transform(hazy_img)
+            clear_img = self.transform(clear_img)
+        return hazy_img, clear_img
 
-
-def get_loaders(root_dir, batch_size=8, val_ratio=0.2, test_ratio=0.1, num_workers=2, transform=None):
-
-    ds = MultiHazyDataset(root_dir, transform)
-    n = len(ds)
+"""
+Helper function to create train, validation, and test DataLoaders.
+Splits the dataset according to the given ratios.
+"""
+def get_loaders(root_dir, batch_size=4, val_ratio=0.2, test_ratio=0.1, num_workers=0, transform=None):
+    """
+    root_dir: Path to dataset root.
+    batch_size: Batch size for DataLoaders.
+    val_ratio: Fraction of data for validation.
+    test_ratio: Fraction of data for testing.
+    num_workers: Number of worker processes.
+    transform: torchvision transforms to apply.
+    Returns: train_loader, val_loader, test_loader
+    """
+    dataset = HazyClearDataset(root_dir, transform=transform)
+    n = len(dataset)
     n_val = int(val_ratio * n)
     n_test = int(test_ratio * n)
     n_train = n - n_val - n_test
-    if n_train < 1: raise ValueError("Not enough data for training")
-    train_ds, val_ds, test_ds = random_split(ds, [n_train, n_val, n_test])
-    train_loader = DataLoader(train_ds, batch_size=batch_size, shuffle=True, num_workers=num_workers, pin_memory=True)
-    val_loader   = DataLoader(val_ds,   batch_size=batch_size, shuffle=False, num_workers=num_workers, pin_memory=True)
-    test_loader  = DataLoader(test_ds,  batch_size=batch_size, shuffle=False, num_workers=num_workers, pin_memory=True)
+    train_ds, val_ds, test_ds = random_split(dataset, [n_train, n_val, n_test])
+    train_loader = DataLoader(train_ds, batch_size=batch_size, shuffle=True, num_workers=num_workers)
+    val_loader = DataLoader(val_ds, batch_size=batch_size, shuffle=False, num_workers=num_workers)
+    test_loader = DataLoader(test_ds, batch_size=batch_size, shuffle=False, num_workers=num_workers)
     return train_loader, val_loader, test_loader
