@@ -6,7 +6,7 @@ from torch.nn import L1Loss
 from skimage.metrics import peak_signal_noise_ratio, structural_similarity
 from torchvision import transforms
 from dataset.dataloader import get_loaders
-from model.dcp_unet import DehazingUNet
+from model_configurations.dcp_unet import DehazingUNet
 from skimage.metrics import mean_squared_error
 
 """ 

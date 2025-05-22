@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader, random_split
 from torchvision import transforms
-from model.dcp_sar_unet import DehazingUNet
+from model_configurations.dcp_sar_unet import DehazingUNet
 from dataset.dataloader_sar import MultiHazySARDataset
 from PIL import Image
 import os

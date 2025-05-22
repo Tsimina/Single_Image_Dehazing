@@ -14,10 +14,10 @@ import time
 def get_model(model_type):
    # Returns the appropriate model based on the model_type argument.
     if model_type == "unet":
-        from model.dcp_unet import DehazingUNet as DehazingModel
+        from model_configurations.dcp_unet import DehazingUNet as DehazingModel
         return DehazingModel()
     elif model_type == "sar_unet":
-        from model.dcp_sar_unet import DehazingUNet as DehazingModel
+        from model_configurations.dcp_sar_unet import DehazingUNet as DehazingModel
         return DehazingModel(use_sar=True)
     else:
         raise ValueError("Unknown model_type. Use 'unet' or 'sar_unet'.")
