@@ -20,7 +20,7 @@ We also explore a multimodal variant that incorporates a synthetic SAR-like refl
 ```
 Single_Image_Dehazing/
 ├── dataset/    # Dataloader script and image resizing utilities
-├── model/      # Model definition 
+├── model_configurations/      # Model definition 
 ├── papers/     # Scientific articles and reference materials
 ├── research/   # Experiments, analyses, and useful links
 ├── src/        # Source code for training and inference
@@ -136,7 +136,7 @@ python -m dataset.resize  --input dataset/ --output dataset/resized --width 256 
 Generate SAR maps for SAR-based models, using the hazy dataset:
 
 ```
-python dataset/sar_img_gen.py --input_dir dataset/hazy --output_dir dataset/hazy_sar
+python dataset/sar_img_gen.py <input_path> <output_path> --noise 25
 ```
 
 > [!NOTE] 
@@ -189,10 +189,10 @@ python single_image_test.py --image <haze_img> --model saved_models/<model_name>
 
 For our experiments, we observed that the training curves tend to plateau around epoch 20, indicating convergence of both reconstruction loss and perceptual metrics such as PSNR and SSIM. All models were trained using an NVIDIA GTX 1660 Ti GPU, with a typical training duration of approximately 4, up to 6 hours when following our proposed methodology and input configuration. 
 
-| Model                 | PSNR val      | SSIM val (%) |
-|:---------------------:|:-------------:|:------------:|
-| DCP+UNet vanilla      |    31.1815    |    93,98     |
-| DCP-SAR Enhanced UNet |     31.61     |    94.36     |
+| Model                 | PSNR val      | SSIM val (%) | Inference Time (s) |
+|:---------------------:|:-------------:|:------------:|:------------------:|
+| DCP+UNet vanilla      |    31.1815    |    93,98     |       0.2165       |
+| DCP-SAR Enhanced UNet |     31.61     |    94.36     |       0.2599       |
 
 Compared to earlier methods such as AOD-Net (29.07 / 86.41%) or Deep DCP (24.32  / 93.42%), our approach benefits from the explicit use of a handcrafted prior while still leveraging the representational power of convolutional networks. Although transformer-based models like DehazeFormer report higher PSNR scores (e.g., 37.54 ), they typically require substantially more computational resources.
 
