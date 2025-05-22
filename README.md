@@ -9,7 +9,7 @@ The goal is to restore visual clarity, contrast, and color fidelity in hazy or f
 We also explore a multimodal variant that incorporates a synthetic SAR-like reflectivity map alongside the RGB and DCP inputs. This structural channel provides depth-aware guidance and helps the network disambiguate haze in regions such as the sky or low-texture surfaces, where handcrafted priors alone are often unreliable.
 
 ## Features 
-- Prior-based dehazing models built on a UNet backbone
+- Prior-based dehazing models built on a U-Net backbone
 - Incorporation of atmospheric scattering priors (e.g., dark channel prior)
 - Load and apply pre-trained model weights
 - Process individual images or batches
@@ -36,14 +36,14 @@ Single_Image_Dehazing/
 
 ## Dataset 
 
-Our prior-based UNet models were trained on the RESIDE Beta dataset, using a total of 18,200 images covering diverse haze conditions and paired clean references. You can download the dataset here: [RESIDE Beta Dataset](https://utexas.app.box.com/s/25idwrsn890w03grdr6pls28cy38r91i). We used the OTS (Outdoor Training Set)for our application. 
+Our prior-based U-Net models were trained on the RESIDE Beta dataset, using a total of 18,200 images covering diverse haze conditions and paired clean references. You can download the dataset here: [RESIDE Beta Dataset](https://utexas.app.box.com/s/25idwrsn890w03grdr6pls28cy38r91i). We used the OTS (Outdoor Training Set)for our application. 
 
 ![reside_dataset](https://github.com/user-attachments/assets/8dde7f4b-95e6-4abe-a596-4425c0ab5067)
 
 In addition to the RGB images, we generate:
 
 - **Dark Channel Prior (DCP) maps**, computed directly from the hazy images using a local minimum filter.
-- **Synthetic SAR reflectivity maps**, created from the hazy images to simulate radar-like structural guidance. These maps are designed to mimic key SAR properties such as edge enhancement and speckle noise, and are used only in the `UNet-DCP+SAR` model.
+- **Synthetic SAR reflectivity maps**, created from the hazy images to simulate radar-like structural guidance. These maps are designed to mimic key SAR properties such as edge enhancement and speckle noise, and are used only in the `DCP+SAR Guided U-Net` model.
 
   ![sar_vs_gen](https://github.com/user-attachments/assets/0b24011d-9d2f-4e0e-8c72-b55c2a63acca)
 
@@ -63,19 +63,19 @@ This modular loading scheme enables flexible switching between models: the DCP-o
 
 This repository contains two main dehazing architectures:
 
-- **UNet-DCP (vanilla):** A baseline U-Net model that uses the RGB input concatenated with a Dark Channel Prior (DCP) map to guide transmission estimation.
+- **U-Net DCP (vanilla):** A baseline U-Net model that uses the RGB input concatenated with a Dark Channel Prior (DCP) map to guide transmission estimation.
 
 
 ![dcp_vanilla](https://github.com/user-attachments/assets/54a213c4-d5d9-4d52-b706-df3aa08a414a)
 
 
-- **UNet-DCP+SAR:** An extended multimodal variant that integrates a synthetic SAR reflectivity map alongside the RGB and DCP inputs, allowing the network to leverage both appearance-based and structure-aware priors for more robust dehazing, especially in challenging regions like sky or low-texture areas.
+- **U-Net DCP+SAR:** An extended multimodal variant that integrates a synthetic SAR reflectivity map alongside the RGB and DCP inputs, allowing the network to leverage both appearance-based and structure-aware priors for more robust dehazing, especially in challenging regions like sky or low-texture areas.
 
   
 ![dcp_sar_sch](https://github.com/user-attachments/assets/2e03974c-a54b-4e86-8e83-66e66113ded8)
 
 
-Our dehazing network uses a UNet architecture to fuse multi-scale feature representations with haze-specific priors:
+Our dehazing network uses a U-Net architecture to fuse multi-scale feature representations with haze-specific priors:
 
 - **Encoder:** Downsampling path extracts hierarchical features  
 - **Decoder:** Upsampling path restores spatial resolution and refines the dehazed output  
@@ -149,7 +149,7 @@ cd Single_Image_Dehazing
 DCP+SAR model
 python -m src.train_dcp_sar
 
-# UNet with priors
+# U-Net with priors
 python -m src.train_dcp_unet
 ```
 > [!NOTE] 
@@ -158,7 +158,7 @@ python -m src.train_dcp_unet
 # Inference
 
 ```
-#UNet 
+#U-Net 
 python src/inference.py --model test_application/saved_models/<model_path> --input_dir src/haze --output_dir src/results --model_type unet 
 
 # DCP-SAR Guided
@@ -171,7 +171,7 @@ python src/inference.py --model test_application/saved_models/<model_path> --inp
 ## Testing (Single Image)
 
 **Standard**
-For DCP+UNet vanilla architecture
+For DCP U-Net vanilla architecture
 
 ```
 cd test_application
@@ -191,14 +191,14 @@ For our experiments, we observed that the training curves tend to plateau around
 
 | Model                 | PSNR val      | SSIM val (%) | Inference Time (s) |
 |:---------------------:|:-------------:|:------------:|:------------------:|
-| DCP+UNet vanilla      |    31.1815    |    93,98     |       0.2165       |
-| DCP-SAR Enhanced UNet |     31.61     |    94.36     |       0.2599       |
+| DCP U-Net vanilla     |    31.1815    |    93,98     |       0.2165       |
+| DCP-SAR Enhanced U-Net|     31.61     |    94.36     |       0.2599       |
 
 Compared to earlier methods such as AOD-Net (29.07 / 86.41%) or Deep DCP (24.32  / 93.42%), our approach benefits from the explicit use of a handcrafted prior while still leveraging the representational power of convolutional networks. Although transformer-based models like DehazeFormer report higher PSNR scores (e.g., 37.54 ), they typically require substantially more computational resources.
 
 
 ## Examples 
-An example result of our Single Image Dehazing pipeline. The left image is the original hazy photograph, and the right image demonstrates the dehazing result produced by the UNet-based prior model.
+An example result of our Single Image Dehazing pipeline. The left image is the original hazy photograph, and the right image demonstrates the dehazing result produced by the U-Net based prior model.
 ![dcp_unet](https://github.com/user-attachments/assets/95c456a1-970c-4d14-b212-6400c5a04cb4)
 
 
