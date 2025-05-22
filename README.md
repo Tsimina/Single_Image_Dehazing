@@ -56,7 +56,7 @@ To streamline data loading and ensure consistent alignment between modalities, w
   ![sar_dcp](https://github.com/user-attachments/assets/ee87f39e-05f4-4f43-bbf1-3657bbc67ffb)
 
 
-This modular loading scheme enables flexible switching between models: the DCP-only variant loads only RGB and dark-channel maps, while the DCP+SAR configuration additionally includes the SAR reflectivity channel. The `dataloader` handles all input formatting and tensor concatenation required for multimodal training and evaluation.
+This modular loading scheme enables flexible switching between models: the DCP-only variant loads only hazy RGB and dark-channel maps, while the DCP+SAR configuration additionally includes the SAR reflectivity channel. The `dataloader` handles all input formatting and tensor concatenation required for multimodal training and evaluation.
 
 
 ## Model Details
@@ -66,12 +66,13 @@ This repository contains two main dehazing architectures:
 - **UNet-DCP (vanilla):** A baseline U-Net model that uses the RGB input concatenated with a Dark Channel Prior (DCP) map to guide transmission estimation.
 
 
-![dcp_vanilla](https://github.com/user-attachments/assets/47d38053-9990-4b3e-a594-4740b6efd758)
+![dcp_vanilla](https://github.com/user-attachments/assets/54a213c4-d5d9-4d52-b706-df3aa08a414a)
+
 
 - **UNet-DCP+SAR:** An extended multimodal variant that integrates a synthetic SAR reflectivity map alongside the RGB and DCP inputs, allowing the network to leverage both appearance-based and structure-aware priors for more robust dehazing, especially in challenging regions like sky or low-texture areas.
 
   
-![dcp_sar_sch](https://github.com/user-attachments/assets/0fe46bac-d20c-4fb0-adae-8e253801f003)
+![dcp_sar_sch](https://github.com/user-attachments/assets/2e03974c-a54b-4e86-8e83-66e66113ded8)
 
 
 Our dehazing network uses a UNet architecture to fuse multi-scale feature representations with haze-specific priors:
