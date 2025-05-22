@@ -168,21 +168,16 @@ python -m src.train
 For DCP+UNet vanilla architecture
 
 ```
-python single_image_test.py 
-  --input test/haze_img2.jpg 
-  --output results/dehazed_img2.jpg 
-  --model model/unet_dehaze_prior.pth
+cd test_application
+python single_image_test.py --image haze_img1.jpg --model saved_models/model_dcp_unet_20.pth --device cuda
 ```
 
 **SAR-Enhanced**
 For SAR enhanced DCP architecture
 
 ```
-python test_application/single_image_test.py 
-  --image test_application/haze_img1.jpg 
-  --model test_application/dehazing_unet_sar_30.pth 
-  --use_sar 
-  --sar_path test_application/haze_img1_sar.jpg
+cd test_application
+python single_image_test.py --image haze_img1.jpg --model saved_models/dehazing_unet_sar_30.pth --use_sar  --sar_path haze_img1_sar.jpg
 ```
 ## Perfromance
 
