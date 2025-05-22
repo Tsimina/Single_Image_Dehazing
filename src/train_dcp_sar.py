@@ -124,7 +124,6 @@ for epoch in range(epochs):
         total_loss += loss.item()
     avg_loss = total_loss / len(train_loader)
 
-    # Evaluare pe val și test
     val_metrics = evaluate_model(val_loader)
     test_metrics = evaluate_model(test_loader)
 
@@ -141,5 +140,5 @@ with open(results_path, "a") as f:
     f.write(f"Test PSNR: {test_metrics['PSNR']:.2f} | Test SSIM: {test_metrics['SSIM']:.4f} | "
             f"Test MSE: {test_metrics['MSE']:.6f} | Test MAE: {test_metrics['MAE']:.6f}\n\n")
 
-torch.save(model.state_dict(), "dehazing_unet_sar_20.pth")
-print("Model saved: dehazing_unet_sar_20.pth")
+torch.save(model.state_dict(), "model_unet_sar.pth")
+print("Model saved: model_unet_sar.pth")
