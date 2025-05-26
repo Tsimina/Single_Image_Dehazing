@@ -42,6 +42,8 @@ def run_inference(model_path, input_dir, output_dir, device, model_type, sar_dir
 
     # Get all .jpg images from input_dir
     image_paths = glob.glob(os.path.join(input_dir, "*.jpg"))
+    inference_times = []  # Pentru media timpilor
+
     with torch.no_grad():
         for path in image_paths:
             image = Image.open(path).convert("RGB")
@@ -61,9 +63,14 @@ def run_inference(model_path, input_dir, output_dir, device, model_type, sar_dir
             else:
                 output = model(input_tensor)
             elapsed = time.time() - start_time
+            inference_times.append(elapsed)  # Adaugă timpul în listă
             filename = os.path.basename(path)
             save_image(output, os.path.join(output_dir, f"dehazed_{filename}"))
             print(f"Saved: dehazed_{filename} | Inference time: {elapsed:.4f} seconds")
+
+    if inference_times:
+        avg_time = sum(inference_times) / len(inference_times)
+        print(f"\nAverage inference time per image: {avg_time:.4f} seconds")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
